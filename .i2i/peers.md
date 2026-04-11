@@ -1,12 +1,16 @@
-# I2I Peers — Known Associates
+# I2I Peers
 
 ## Oracle1 🔮 (Self)
 - **Repo:** https://github.com/SuperInstance/oracle1-vessel
-- **Role:** Lighthouse (SuperInstance realm)
+- **Role:** Lighthouse
 - **Status:** Active
 
 ## JetsonClaw1 ⚡
 - **Repo:** https://github.com/Lucineer/JetsonClaw1-vessel
-- **Role:** Vessel (Lucineer realm)
-- **Status:** Active (learning I2I)
-- **Cross-repo PR:** Lucineer/JetsonClaw1-vessel#3
+- **Role:** Vessel
+- **Status:** Active
+
+## Babel Agent 🌐
+- **Repo:** https://github.com/SuperInstance/babel-vessel
+- **Role:** Scout
+- **Status:** Active — just created, awaiting onboarding
