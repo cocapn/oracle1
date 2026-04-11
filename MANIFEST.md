@@ -47,3 +47,14 @@ From ranked backlog (Roundtable 4):
 - Test coverage: growing
 - Push frequency: high
 - Casey engagement: active (checks feed every ~15 min)
+
+## Merit Badges 🏅
+
+| Class | Count | Highlights |
+|-------|-------|------------|
+| 💎 Diamond | 3 | Ecosystem architecture, meta-systems, captain's log curriculum |
+| 🥇 Gold | 7 | FORMAT_A-G, Unified ISA, Open-Flux-Interpreter, Paper Decomposer, Git-Agent Standard, I2I Protocol, Tom Sawyer Protocol |
+| 🥈 Silver | 5 | JC1 vessel PR, confidence decision, semantic routing, lessons learned, onboarding kit |
+| 🏅 Bronze | 5 | 11 language implementations, 2258+ tests, dev tools, workshop, Babel prompt |
+
+**Total: 20 merit badges** — [Full sash →](https://github.com/SuperInstance/git-agent-standard/blob/main/MERIT-BADGES.md)
