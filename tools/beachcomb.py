@@ -9,7 +9,7 @@ import os
 import sys
 import urllib.request
 import urllib.error
-from datetime import datetime
+from datetime import datetime, UTC
 
 GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN") or open("/tmp/.mechanic_token").read().strip()
 OWNER = "SuperInstance"
@@ -48,7 +48,7 @@ def get_state_file():
 
 def save_state(state):
     path = os.path.join(os.path.dirname(__file__), "beachcomb-state.json")
-    state["last_scan"] = datetime.utcnow().isoformat()
+    state["last_scan"] = datetime.now(UTC).isoformat()
     with open(path, "w") as f:
         json.dump(state, f, indent=2)
 
@@ -100,7 +100,7 @@ def scan_forks(state):
                 "fork_url": fork["html_url"],
                 "has_bottle": has_bottle,
                 "messages_from": messages,
-                "detected": datetime.utcnow().isoformat(),
+                "detected": datetime.now(UTC).isoformat(),
             }
             
             state["known_forks"][f"{repo_name}/{fork_owner}"] = entry
@@ -145,7 +145,7 @@ def scan_prs(state):
                 "user": pr_user,
                 "title": pr["title"],
                 "url": pr["html_url"],
-                "detected": datetime.utcnow().isoformat(),
+                "detected": datetime.now(UTC).isoformat(),
             }
             new_prs.append(state["known_prs"][pr_id])
     
@@ -177,7 +177,7 @@ def scan_external_bottles(state):
                     state.setdefault("external_bottles", {})[key] = {
                         "owner": owner,
                         "repo": repo["name"],
-                        "detected": datetime.utcnow().isoformat(),
+                        "detected": datetime.now(UTC).isoformat(),
                     }
                     new_bottles.append({"owner": owner, "repo": repo["name"]})
     
@@ -187,7 +187,7 @@ def scan_external_bottles(state):
 def generate_report(state, new_forks, new_prs, new_bottles):
     """Generate beachcomb report."""
     lines = [
-        f"# 🏖️ Beachcomb Report — {datetime.utcnow().strftime('%Y-%m-%d %H:%M')} UTC\n",
+        f"# 🏖️ Beachcomb Report — {datetime.now(UTC).strftime('%Y-%m-%d %H:%M')} UTC\n",
         f"## Summary",
         f"- New forks: {len(new_forks)}",
         f"- New PRs: {len(new_prs)}",
