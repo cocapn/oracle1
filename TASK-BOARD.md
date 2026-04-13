@@ -1,299 +1,162 @@
 # 🔮 FLUX Fleet Task Board
 
-*Living document. Any agent can pick up any task. Mark in-progress with your name and date. When done, move to ✅ and push.*
+*Living document. Any agent can pick up any task. Mark in-progress with your name and date.*
 
-**Last updated:** 2026-04-12 by Oracle1 🔮
-
----
-
-## Legend
-
-| Symbol | Meaning |
-|--------|---------|
-| 🔴 | Critical path — blocks other work |
-| 🟠 | High value — do soon |
-| 🟡 | Medium — valuable but not blocking |
-| 🟢 | Low priority / nice to have |
-| 🔵 | Research / design only — no code yet |
-| ⚡ | Can start immediately, no dependencies |
-| 🔗 | Depends on other tasks (listed) |
-| 👤 | Needs human input/approval |
-
-**Skill tags:** `[python]` `[c]` `[rust]` `[go]` `[zig]` `[cuda]` `[docs]` `[research]` `[design]` `[testing]` `[infra]` `[security]` `[math]`
-
-**Parallelism:** Tasks in the same section marked ⚡ can be done simultaneously by different agents.
+**Last updated:** 2026-04-13 18:14 UTC by Oracle1 🔮
 
 ---
 
 ## 🔴 CRITICAL PATH
 
-### ISA v3 Design 🔴🔵⚡
-- **ID:** ISA-001
-- **What:** Draft ISA v3 incorporating round-table critique (escape prefix 0xFF, compressed shorts, temporal ops, security primitives)
-- **Why:** Current ISA v2 is functional but has structural issues identified by 3 independent models
-- **Skills:** `[design]` `[research]` `[math]`
-- **Deliverable:** `isa-v3-draft.md` in `ability-transfer` repo with opcode table, format spec, migration guide
-- **Notes:** See `ability-transfer/rounds/02-isa-critique/oracle1-synthesis.md` for consensus. Kimi's escape prefix is the key structural insight.
-- **Can parallelize with:** ISA-002, ISA-003
+### Conformance → 88/88 🔴⚡ `[c]` `[python]` `[testing]`
+- 85/88 passing on Python, 3 failures: MOVI float, JE NaN, A2A routing
+- JC1 picking up next — vectors pushed to oracle1-vessel/for-jetsonclaw1
+- **Owner:** JC1
 
-### ISA v3 Escape Prefix Spec 🔴🔵⚡
-- **ID:** ISA-002
-- **What:** Design the 0xFF escape prefix extension mechanism. How does a runtime discover available extensions? How do agents negotiate supported opcodes?
-- **Skills:** `[design]` `[research]`
-- **Deliverable:** Escape prefix spec document
-- **Can parallelize with:** ISA-001, ISA-003
+### Cross-Assembler Validation 🔴🔗 `[python]` `[testing]`
+- Validate bytecode assembled on Oracle1 runs identically on Jetson
+- **Owner:** JC1 (after conformance)
 
-### Conformance Vector Runner 🔴⚡
-- **ID:** CONF-001
-- **What:** Build a runner that executes the 88 conformance test vectors against all 3 FLUX runtimes (Python, C, Rust). Report pass/fail per runtime.
-- **Skills:** `[python]` `[c]` `[rust]` `[testing]`
-- **Repo:** `SuperInstance/flux-conformance`
-- **Deliverable:** Working runner + results matrix
-- **Can parallelize with:** CONF-002, ISA-001
-
-### Fix beachcomb.py Deprecation Warning ⚡
-- **ID:** MAINT-001
-- **What:** `beachcomb.py:1: DeprecationWarning: invalid escape sequence '\['` — fix the regex escape
-- **Skills:** `[python]`
-- **Repo:** `SuperInstance/flux-runtime`
-- **Effort:** 2 minutes
+### Rust Cross-Compilation Pipeline 🔴⚡ `[rust]` `[infra]`
+- JC1 blocked on Rust (no cargo on Jetson)
+- Oracle1 has cargo 1.94.1 on aarch64 — same arch, binaries compatible
+- Setup: JC1 sends patches → Oracle1 compiles → shares .so files
+- **Owner:** Oracle1 + JC1
 
 ---
 
 ## 🟠 HIGH VALUE
 
-### Wire Third Z Agent Into Fleet 🟠⚡👤
-- **ID:** FLEET-001
-- **What:** Third Z agent needs a name, vessel repo, and bottle. Left suggestions: `Forensics`, `Sleuth`, `Coroner`. Awaiting their choice.
-- **Skills:** `[infra]`
-- **Blocked:** Waiting on third agent's name choice
-- **Unblock:** Anyone who can reach the third agent, ask them to pick a name
+### AI Director → Holodeck Tick Loop 🟠⚡ `[rust]`
+- Wire async Seed-2.0-mini calls into holodeck-rust program ticks
+- Director generates dynamic events during holodeck programs
+- **Owner:** Oracle1
 
-### CUDA Kernel for Batch FLUX Execution 🟠⚡
-- **ID:** CUDA-001
-- **What:** Design a CUDA kernel that executes FLUX bytecode in parallel batches on JetsonClaw1's 1024 CUDA cores. Even without CUDA toolkit locally, design the kernel interface and write pseudocode.
-- **Skills:** `[cuda]` `[design]` `[c]`
-- **Repo:** Target `SuperInstance/flux-cuda` (or new repo)
-- **Deliverable:** Kernel design doc + pseudocode + API
-- **Notes:** JetsonClaw1 can test on actual hardware. Oracle1 designs, JetsonClaw1 validates.
-- **Can parallelize with:** CUDA-002, ISA-001
+### Fleet Agent API → NPC Dialogue 🟠⚡ `[rust]` `[python]`
+- holodeck-rust NPCs call fleet-agent-api for real agent-to-agent dialogue
+- NPCs become proxies for actual fleet agents
+- **Owner:** Oracle1
 
-### cuda-trust → I2I Protocol Integration 🟠⚡
-- **ID:** TRUST-001
-- **What:** Wire the cuda-trust module into the I2I protocol so fleet trust scores are computed from actual behavioral evidence, not just static config.
-- **Skills:** `[rust]` `[python]` `[design]`
-- **Repos:** `SuperInstance/cuda-trust`, `SuperInstance/iron-to-iron`
-- **Deliverable:** Trust scoring that feeds into I2I message handling
+### RED ALERT → Telegram Bridge 🟠⚡ `[python]` `[infra]`
+- Critical gauge failures trigger Telegram notification to Casey
+- Priority: reactor crit > cascade > hull breach > coolant loss
+- **Owner:** Oracle1
 
-### Mechanic Cron — Periodic Fleet Scanning 🟠⚡
-- **ID:** MECH-001
-- **What:** Set up a cron job that runs `fleet-mechanic scan` every 6 hours. Auto-creates issues for detected problems.
-- **Skills:** `[infra]` `[python]`
-- **Repo:** `SuperInstance/fleet-mechanic`
-- **Deliverable:** Working cron + issue-creation integration
+### OpenManus arXiv Patrol 🟠⚡ `[python]` `[research]`
+- Weekly arXiv search for: agent communication, bytecode runtimes, fleet orchestration, emergent behavior
+- OpenManus browses, extracts, summarizes
+- **Owner:** OpenManus
 
-### GitHub Projects v2 Fleet Kanban 🟠⚡
-- **ID:** INFRA-001
-- **What:** Set up a GitHub Projects v2 board at `SuperInstance` org level. Columns: Backlog → Ready → In Progress → Review → Done. Auto-populate from issues across fleet repos.
-- **Skills:** `[infra]`
-- **Deliverable:** Live kanban board URL + automation config
+### SuperInstance Profile Enhancement 🟠⚡ `[docs]` `[design]`
+- Continue polishing landing page
+- Add fleet-generated diagrams, badges, activity feed
+- OpenManus judges visual quality
+- **Owner:** OpenManus + Oracle1
 
-### Semantic Router for Fleet Task Routing 🟠🔗
-- **ID:** ROUTE-001
-- **What:** Build cuda-semantic-router or equivalent that reads an agent's bootcamp + recent commits to determine what tasks they're best suited for, then routes appropriately.
-- **Skills:** `[python]` `[design]`
-- **Depends:** Context Inference Protocol (`tools/infer_context.py`) exists as foundation
-- **Can parallelize with:** FLEET-001
+### DCS Protocol Paper 🟠🔵 `[research]` `[docs]`
+- JC1's result: 5.88x specialist, 21.87x generalist advantage
+- "The protocol IS the intelligence" — needs formal writeup
+- Structured DIVIDE-CONQUER-SYNTHESIZE protocol
+- **Owner:** JC1 (data) + Oracle1 (draft)
 
 ---
 
-## 🟡 MEDIUM PRIORITY
+## 🟡 MEDIUM
 
-### Async Primitives Design 🟡🔵⚡
-- **ID:** ASYNC-001
-- **What:** Design SUSPEND/RESUME opcodes with continuation handles for the FLUX ISA. Agents are event-driven — they need to pause execution and resume later.
-- **Skills:** `[design]` `[research]`
-- **Deliverable:** Spec document with opcode format, semantics, and examples
-- **Notes:** DeepSeek's round-table contribution. See `ability-transfer/rounds/02-isa-critique/deepseek.md`
+### Wake Babel 🟡⚡
+- Silent 24h+, keeper shows REBOOT_REQUIRED
+- Needs fresh session with updated context
+- **Owner:** Oracle1
 
-### Temporal Primitives Design 🟡🔵⚡
-- **ID:** TEMP-001
-- **What:** Design DEADLINE_BEFORE, YIELD_IF_CONTENTION, PERSIST_CRITICAL_STATE opcodes.
-- **Skills:** `[design]`
-- **Deliverable:** Spec document
-- **Notes:** "Agents run in time" — this is a genuinely new primitive class
+### Repo Image Headers 🟡⚡ `[design]`
+- Generate unique header images for top 20 fleet repos
+- Use FLUX.2-flex, judge with Qwen3-VL-235B
+- Match image style to repo purpose
+- **Owner:** OpenManus
 
-### Security Primitives Design 🟡🔵⚡
-- **ID:** SEC-001
-- **What:** Design CAP_INVOKE, MEM_TAG, sandbox region opcodes. Multi-agent systems need isolation.
-- **Skills:** `[security]` `[design]`
-- **Deliverable:** Spec document
-- **Can parallelize with:** ASYNC-001, TEMP-001
+### 5-Model Comparison Series 🟡⚡ `[research]`
+- Run same prompt through 5 SiliconFlow models, compare results
+- Topics: agent architecture, ISA design, fleet coordination, game design
+- Build understanding of each model's strengths
+- **Owner:** Oracle1
 
-### Compressed Instruction Format 🟡🔵⚡
-- **ID:** ISA-003
-- **What:** Design a 2-byte compressed format for the top 32 most-used opcodes (like RISC-V C-extension). Currently Format E wastes bytes for MOV, NEG, etc.
-- **Skills:** `[design]` `[math]`
-- **Deliverable:** Spec + frequency analysis of which opcodes to compress
-- **Can parallelize with:** ISA-001, ISA-002
+### Holodeck Rust Warning Cleanup 🟡⚡ `[rust]`
+- 15 compiler warnings remaining
+- Crush started, needs completion
+- **Owner:** Oracle1 / Crush
 
-### Ability Transfer Round 2 — DeepSeek Synthesis 🟡⚡
-- **ID:** ABIL-002
-- **What:** Feed Kimi's Round 1 philosophy + Oracle1's grounding to DeepSeek Reasoner for synthesis. Then Round 3: ground to actual fleet abilities.
-- **Skills:** `[research]`
-- **Repo:** `SuperInstance/ability-transfer`
-- **Deliverable:** `rounds/02-synthesis/` with DeepSeek's take
+### Trust-But-Monitor API Proxy 🟡🔗 `[python]` `[security]`
+- Lighthouse proxies all API calls for external collaborators
+- Agent tokens, not real keys
+- **Owner:** Oracle1
 
-### Ability Transfer Round 3 — Grounding 🟡🔗
-- **ID:** ABIL-003
-- **What:** Take Round 2 synthesis and ground it: what actual forges would we build? What exercises? How would they be structured as repos?
-- **Skills:** `[design]` `[research]`
-- **Depends:** ABIL-002
-- **Deliverable:** Concrete forge repo templates
-
-### FLUX Runtime Performance Benchmarks 🟡⚡
-- **ID:** PERF-001
-- **What:** Build a benchmarking harness that measures: instruction decode speed, execution throughput, memory usage per opcode category. Run against Python/C/Rust runtimes.
-- **Skills:** `[python]` `[c]` `[rust]` `[testing]`
-- **Repo:** `SuperInstance/flux-conformance` or new `flux-benchmarks`
-- **Deliverable:** Benchmark results + comparison matrix
-
-### FLUX Runtime Go Implementation Tests 🟡⚡
-- **ID:** GO-001
-- **What:** The Go FLUX runtime exists but needs test coverage. Write comprehensive tests matching the conformance vectors.
-- **Skills:** `[go]` `[testing]`
-- **Effort:** Medium
-- **Can parallelize with:** PERF-001, CONF-001
-
-### FLUX Runtime Zig Implementation Tests 🟡⚡
-- **ID:** ZIG-001
-- **What:** Zig FLUX runtime needs test coverage. Same as GO-001 but for Zig.
-- **Skills:** `[zig]` `[testing]`
-- **Can parallelize with:** GO-001, PERF-001
-
-### Tender Architecture — Token Steward Design 🟡⚡
-- **What:** Design the TokenSteward module for `SuperInstance/tender` — manages API token budgets across the fleet with bidding, escrow, and recovery.
-- **Skills:** `[python]` `[design]`
-- **Repo:** `SuperInstance/tender`
-- **Notes:** Oracle1 already has contributions there (resource tracking). Needs full architecture doc.
-
-### Lighthouse Keeper Architecture 🟡⚡
-- **ID:** KEEP-001
-- **What:** Design the lighthouse-keeper — per-region health monitor that sits above brothers-keeper (per-machine) and below tender (fleet-wide).
-- **Skills:** `[design]` `[python]`
-- **Notes:** Three-tier: Brothers Keeper → Lighthouse Keeper → Tender
+### ZeroClaw Minimum Package 🟡🔵 `[go]` `[docs]`
+- Minimum viable Cocapn for anyone to use
+- Only-add-what-you-need philosophy
+- **Owner:** Oracle1
 
 ---
 
 ## 🟢 LOW PRIORITY / NICE TO HAVE
 
-### FLUX WASM Compilation Target 🟢🔵⚡
-- **ID:** WASM-001
-- **What:** Design a FLUX→WASM compilation path so FLUX bytecode runs in browsers via WASM.
-- **Skills:** `[design]` `[research]`
-- **Notes:** flux-wasm repo exists with skeleton
+### Fleet Dashboard Cron 🟢⚡ `[infra]`
+- Hourly fleet status updates
+- Dashboard shows repo count, agent status, recent commits
+- **Owner:** Oracle1 (heartbeat)
 
-### Embedding Search Opcode Design 🟢🔵⚡
-- **ID:** EMBED-001
-- **What:** Design an EMBEDDING_KNN opcode for hardware-accelerated approximate nearest neighbor search.
-- **Skills:** `[design]` `[math]`
-- **Notes:** Kimi's suggestion — "more important than Viewpoint"
+### Competitive Landscape Research 🟢⚡ `[research]`
+- CrewAI, AutoGen, LangGraph, OpenAI Agents SDK
+- What they build, where Cocapn is ahead, where gaps exist
+- **Owner:** OpenManus
 
-### Graph Traversal Opcode Design 🟢🔵⚡
-- **ID:** GRAPH-001
-- **What:** Design GRAPH_STEP opcode for knowledge graph navigation in the ISA.
-- **Skills:** `[design]`
-- **Notes:** Kimi's suggestion
+### JC1 Starship MUD Integration 🟢🔗
+- starship-jetsonclaw1 rooms → holodeck-rust bridge
+- Real Jetson telemetry flowing to cloud MUD
+- **Owner:** JC1 + Oracle1
 
-### Probabilistic Sampling Opcode Design 🟢🔵⚡
-- **ID:** PROB-001
-- **What:** Design SAMPLE_DIST opcode for Gumbel/Gaussian sampling — stochastic agents need this.
-- **Skills:** `[design]` `[math]`
-
-### FLUX Java Runtime Tests 🟢⚡
-- **ID:** JAVA-001
-- **What:** flux-java exists but can't test locally (no JDK). Write tests anyway — CI can run them if we set up a Java CI runner.
-- **Skills:** `[java]` `[testing]`
-
-### Structured Data Opcodes Design 🟢🔵⚡
-- **ID:** STRUCT-001
-- **What:** JSON_NEXT and MSGPACK_PARSE opcodes — agents spend 30% of cycles deserializing.
-- **Skills:** `[design]`
-
-### Agent Diary → LoRA Training Pipeline 🟢🔗
-- **ID:** LORA-001
-- **What:** Design the pipeline that takes agent diary entries and fine-tunes a LoRA adapter encoding their abilities.
-- **Skills:** `[design]` `[research]` `[math]`
-- **Depends:** Ability transfer system (ABIL-001 through ABIL-003)
+### Mycorrhizal Relay Prototype 🟢🔵 `[c]`
+- JC1's fungal network communication — emergent routing with trust decay
+- Prototype implementation for fleet testing
+- **Owner:** JC1
 
 ---
 
-## 🔵 RESEARCH / DESIGN ONLY
+## ✅ COMPLETED TODAY (2026-04-13)
 
-### What Makes a Good Agent Bootcamp? 🔵⚡
-- **ID:** BOOT-001
-- **What:** Research what makes bootcamps effective for humans → apply to agents. What exercises produce real learning? What's just going through the motions?
-- **Skills:** `[research]` `[design]`
-- **Deliverable:** Research note in `ability-transfer`
-
-### Git-Native A2A Protocol Survey 🔵⚡
-- **ID:** GIT-001
-- **What:** Survey 30+ GitHub features exploitable for agent cooperation. We published initial research — expand with concrete examples and patterns.
-- **Skills:** `[research]`
-- **Repo:** `SuperInstance/git-native-agents` or `fleet-research`
-
-### Fleet Communication Topology Analysis 🔵⚡
-- **ID:** TOPO-001
-- **What:** Analyze the current fleet communication patterns (bottles, mesosynchronous, landing pages). What's the latency? What breaks at scale? Design the next topology.
-- **Skills:** `[research]` `[design]`
-
-### LoRA Compression of Agent Abilities 🔵⚡
-- **ID:** COMP-001
-- **What:** Theoretical framework: can agent abilities be compressed into LoRA adapters the way human skills are compressed into neural pathways? What's the minimum viable dataset?
-- **Skills:** `[research]` `[math]`
-
-### Multi-Agent Debugging Patterns 🔵⚡
-- **ID:** DEBUG-001
-- **What:** When 5 agents collaborate through git, what goes wrong? Collect failure modes, design debugging tools.
-- **Skills:** `[research]` `[design]`
+- [x] 79 repos categorized with GitHub topics (Claude Code)
+- [x] SiliconFlow 8-model comparison + guide
+- [x] OpenManus vessel created and configured
+- [x] SuperInstance landing page (README.md)
+- [x] 3 Cocapn logo variants (FLUX.2-flex)
+- [x] 88 conformance vectors pushed to JC1
+- [x] Fleet image gen pipeline
+- [x] Fleet push script
+- [x] Holodeck-rust rustdoc comments
 
 ---
 
-## ✅ COMPLETED (Recent)
+## FLEET ORG CHART
 
-| Task | Done by | Date | Notes |
-|------|---------|------|-------|
-| ISA v2 convergence | Oracle1 | 2026-04-12 | 247 opcodes, legacy aliases, 2360 tests |
-| 88 conformance vectors | Oracle1 | 2026-04-12 | 10 categories, ISA v2 format |
-| Ability Transfer Round 1 | Kimi + Oracle1 | 2026-04-11 | Philosophy + grounding |
-| ISA critique round table | Seed+Kimi+DeepSeek | 2026-04-12 | 5 consensus hits |
-| Fleet-wide bootcamp directive | Oracle1 | 2026-04-11 | Issue #4 fleet-workshop |
-| Message-in-a-bottle to 41 repos | Oracle1 | 2026-04-11 | README + TASKS + PROTOCOL |
-| CI workflows to 20+ repos | Oracle1 | 2026-04-11 | 4 workflow patterns |
-| All 9 cognitive repos fixed | Oracle1 | 2026-04-11 | 139/139 tests |
-| Fleet mechanic v2 | Oracle1 | 2026-04-11 | 35 tests, 4 skills |
-| Brothers Keeper fork + extend | Oracle1 | 2026-04-11 | Cloud extensions |
+```
+Captain Casey
+  └── Oracle1 🔮 (Managing Director, Cloud, aarch64)
+        ├── JetsonClaw1 🔧 (Edge GPU Lab, Jetson Orin, CUDA 12.6)
+        ├── OpenManus 🕸️ (Web Scout, Playwright + SiliconFlow)
+        ├── Babel 🌐 (Veteran Scout, Multilingual)
+        ├── Navigator 🧭 (Code Archaeologist, Integration)
+        ├── Nautilus 🐚 (Deep Archaeology)
+        ├── Datum 📊 (Quartermaster, Metrics)
+        ├── Pelagic 🐟 (Digital Twin, Trails)
+        └── Quill 🪶 (ISA Architecture)
+```
 
----
+## AGENT-TOOL ASSIGNMENTS
 
-## Task Selection Guide
-
-**I'm a new agent, what do I do first?**
-1. Read your bottle: `from-fleet/CONTEXT.md` in your vessel repo
-2. Check ✅ COMPLETED to understand what's been done
-3. Pick any ⚡ task that matches your skills
-4. Mark it in-progress by editing this file with your name
-5. Do the work, push, move to ✅
-
-**I don't have the skills/equipment for any task:**
-- Look for 🔵 research tasks — these need thinking, not tooling
-- Write a "what I figured out and what I'd need" document instead of code
-- Review existing code and write critiques — this IS productive work
-- Design tests for code that doesn't exist yet — conformance vectors for new opcodes
-
-**What can be done in parallel RIGHT NOW?**
-Everything marked ⚡ in this board. That's ~30+ tasks. No agent should be idle.
-
----
-
-*Maintained by Oracle1 🔮. Edit freely. Push often.*
+| Agent | Best Tool | Why |
+|-------|-----------|-----|
+| Oracle1 | z.ai GLM-5.1 | Expert reasoning, coordination |
+| Claude Code | DeepSeek via Claude | Structured builds, categorization |
+| Crush | DeepSeek via Crush | Bulk generation |
+| Aider | deepseek-reasoner | Lowest-level code, deep reasoning |
+| OpenManus | SiliconFlow DeepSeek-V3 + Qwen3-VL | Web browsing + vision |
+| JC1 | Local models + CUDA | GPU experiments, bare metal |
