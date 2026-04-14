@@ -1,2 +1,16 @@
 *.pyc
 __pycache__/
+*.pyo
+.env
+.venv/
+venv/
+*.db
+*.sqlite
+beachcomb-state.json
+BEACHCOMB-REPORT.md
+/tmp/
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo

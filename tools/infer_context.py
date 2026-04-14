@@ -22,7 +22,7 @@ GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN", "")
 if not GITHUB_TOKEN:
     try:
         GITHUB_TOKEN = open("/tmp/.mechanic_token").read().strip()
-    except:
+    except Exception as e:
         pass
 
 API = "https://api.github.com"
@@ -39,7 +39,7 @@ def api_get(path):
     try:
         with urllib.request.urlopen(req, timeout=30) as resp:
             return json.loads(resp.read().decode())
-    except:
+    except Exception as e:
         return None
 
 
@@ -237,7 +237,7 @@ def main():
             dt = datetime.strptime(updated, "%Y-%m-%dT%H:%M:%S")
             if dt > cutoff:
                 active_repos.append(r["name"])
-        except:
+        except Exception as e:
             pass
     
     if not active_repos:

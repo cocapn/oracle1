@@ -76,6 +76,6 @@ refuses = ["destructive_operations", "data_exfiltration"]
 
 [associates]
 reports_to = "casey"
-collaborates = ["jetsonclaw1", "superz", "babel"]
-manages = ["superz", "babel", "claude-code"]
+collaborates = ["jetsonclaw1", "datum", "babel"]
+manages = ["babel", "claude-code"]
 trusts = { jetsonclaw1 = 0.90, superz = 0.75, babel = 0.70, claude_code = 0.65 }

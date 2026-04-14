@@ -3,6 +3,7 @@
 Fleet Discovery Crawler — scans CAPABILITY.toml files across the fleet.
 """
 import json
+import os
 import sys
 import urllib.request
 from datetime import datetime, timedelta
@@ -13,11 +14,7 @@ try:
 except ImportError:
     import tomli as tomllib  # Python < 3.11
 
-GITHUB_TOKEN = open(Path.home() / ".bashrc").read()
-for line in GITHUB_TOKEN.split("\n"):
-    if "export GITHUB_TOKEN=" in line:
-        GITHUB_TOKEN = line.split("=", 1)[1].strip().strip("'\"")
-        break
+GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN", "")
 
 ORG = "SuperInstance"
 CAPABILITY_FILE = "CAPABILITY.toml"
@@ -39,7 +36,7 @@ def fetch_toml(repo_full_name):
         req = urllib.request.Request(url, headers={"Authorization": f"token {GITHUB_TOKEN}"})
         with urllib.request.urlopen(req, timeout=5) as resp:
             return tomllib.loads(resp.read().decode())
-    except:
+    except Exception as e:
         return None
 
 
@@ -53,7 +50,7 @@ def recency_weight(last_used: str) -> float:
         if days < 7: return 0.7
         if days < 30: return 0.5
         return 0.3
-    except:
+    except Exception as e:
         return 0.3
 
 
